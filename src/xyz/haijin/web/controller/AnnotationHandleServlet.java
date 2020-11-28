@@ -1,6 +1,7 @@
 package xyz.haijin.web.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
@@ -10,7 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import xyz.haijin.annotation.Controller;
+import xyz.haijin.annotation.Encoding;
 import xyz.haijin.annotation.RequestMapping;
+import xyz.haijin.ioc.context.HaijinContext;
+import xyz.haijin.json.JSONObject;
 import xyz.haijin.util.BeanUtils;
 import xyz.haijin.util.RequestMapingMap;
 import xyz.haijin.util.ScanClassUtil;
@@ -19,10 +23,7 @@ import xyz.haijin.web.view.DispatchActionConstant;
 import xyz.haijin.web.view.View;
 
 /**
- * <p>ClassName: AnnotationHandleServlet<p>
- * <p>Description: AnnotationHandleServlet作为自定义注解的核心处理器以及负责调用目标业务方法处理用户请求<p>
- * @author xudp
- * @version 1.0 V
+ * 作为自定义注解的核心处理器以及负责调用目标业务方法处理用户请求
  */
 public class AnnotationHandleServlet extends HttpServlet {
 
@@ -36,25 +37,52 @@ public class AnnotationHandleServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.excute(request, response);
+        try {
+            this.excute(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        this.excute(request, response);
+        try {
+            this.excute(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void excute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    private void excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
         //将当前线程中HttpServletRequest对象存储到ThreadLocal中，以便在Controller类中使用
         WebContext.requestHodler.set(request);
+        System.out.println("request:"+request.getParameter("name"));
         //将当前线程中HttpServletResponse对象存储到ThreadLocal中，以便在Controller类中使用
         WebContext.responseHodler.set(response);
         //解析url
         String lasturl = pareRequestURI(request);
         //获取要使用的类
         Class<?> clazz = RequestMapingMap.getRequesetMap().get(lasturl);
+        //获取包路径
+        String packageName = RequestMapingMap.getPackageName(lasturl);
+        //获取编码
+        String encoding= RequestMapingMap.getEncoding(lasturl);
+
+        request.setCharacterEncoding("utf-8");
+        response.setCharacterEncoding("utf-8");
+
+        if(encoding != null && !"".equals(encoding.toLowerCase().trim()) ){
+            String encodingTmp = encoding.toLowerCase().trim();
+            if("gbk".equals(encodingTmp) || "utf-8".equals(encodingTmp)){
+                request.setCharacterEncoding(encoding.trim());
+                response.setCharacterEncoding(encoding.trim());
+            }
+        }
         //创建类的实例
-        Object classInstance = BeanUtils.instanceClass(clazz);
+//        Object classInstance = BeanUtils.instanceClass(clazz);
+        HaijinContext haijinContext = HaijinContext.getInstance();
+        Object classInstance = haijinContext.autoLoadBean(packageName,HaijinContext.toLowerCaseFirstOne(clazz.getSimpleName()));
         //获取类中定义的方法
         Method [] methods = BeanUtils.findDeclaredMethods(clazz);
         Method method = null;
@@ -74,16 +102,24 @@ public class AnnotationHandleServlet extends HttpServlet {
                 Object retObject = method.invoke(classInstance);
                 //如果方法有返回值，那么就表示用户需要返回视图
                 if (retObject!=null) {
-                    View view = (View)retObject;
-                    //判断要使用的跳转方式
-                    if(view.getDispathAction().equals(DispatchActionConstant.FORWARD)){
-                        //使用服务器端跳转方式
-                        request.getRequestDispatcher(view.getUrl()).forward(request, response);
-                    }else if(view.getDispathAction().equals(DispatchActionConstant.REDIRECT)){
-                        //使用客户端跳转方式
-                        response.sendRedirect(request.getContextPath()+view.getUrl());
-                    }else{
-                        request.getRequestDispatcher(view.getUrl()).forward(request, response);
+                    if (retObject instanceof View) {
+                        View view = (View)retObject;
+                        //判断要使用的跳转方式
+                        if(view.getDispathAction().equals(DispatchActionConstant.FORWARD)){
+                            //使用服务器端跳转方式
+                            request.getRequestDispatcher(view.getUrl()).forward(request, response);
+                        }else if(view.getDispathAction().equals(DispatchActionConstant.REDIRECT)){
+                            //使用客户端跳转方式
+                            response.sendRedirect(request.getContextPath()+view.getUrl());
+                        }else{
+                            request.getRequestDispatcher(view.getUrl()).forward(request, response);
+                        }
+                    } if (retObject instanceof JSONObject) {
+                        printWriter(response,retObject+"");
+                    }
+                    else {
+                        String json = (String) retObject;
+                        printWriter(response,json);
                     }
                 }
             }
@@ -94,6 +130,12 @@ public class AnnotationHandleServlet extends HttpServlet {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    private void printWriter(HttpServletResponse resp,String json) throws IOException {
+        PrintWriter wp = resp.getWriter();
+        wp.write(json);
+        wp.close();
     }
 
     @Override
@@ -135,11 +177,14 @@ public class AnnotationHandleServlet extends HttpServlet {
                 for(Method m:methods){//循环方法，找匹配的方法进行执行
                     if(m.isAnnotationPresent(RequestMapping.class)){
                         String anoPath = m.getAnnotation(RequestMapping.class).value();
+                        String encoding = m.getAnnotation(Encoding.class) != null ? m.getAnnotation(Encoding.class).value() : null;
                         if(anoPath!=null && !"".equals(anoPath.trim())){
                             if (RequestMapingMap.getRequesetMap().containsKey(anoPath)) {
                                 throw new RuntimeException("RequestMapping映射的地址不允许重复！");
                             }
                             RequestMapingMap.put(anoPath, clazz);
+                            RequestMapingMap.putPackageName(anoPath,packageName);
+                            RequestMapingMap.putEncoding(anoPath,encoding);
                         }
                     }
                 }

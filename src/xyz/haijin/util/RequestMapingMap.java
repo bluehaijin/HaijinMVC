@@ -11,6 +11,28 @@ import java.util.Map;
  */
 public class RequestMapingMap {
 
+    private static Map<String, String> packageNameMap = new HashMap<>();//访问的controller路径
+
+    public static String getPackageName(String path) {
+        return packageNameMap.get(path);
+    }
+
+    public static void putPackageName(String path, String packageName) {
+        packageNameMap.put(path, packageName);
+    }
+
+
+
+    private static Map<String, String> encodingMap = new HashMap<>();//访问的controller编码
+
+    public static String getEncoding(String path) {
+        return encodingMap.get(path);
+    }
+
+    public static void putEncoding(String path, String packageName) {
+        encodingMap.put(path, packageName);
+    }
+
     /**
      * @Field: requesetMap
      *          用于存储方法的访问路径

@@ -11,6 +11,14 @@
         <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 
+    <listener>
+        <listener-class>xyz.haijin.ioc.context.ContextLoaderListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>pathPackage</param-name>
+        <param-value>xyz.haijin.test.dao,xyz.haijin.test.service</param-value> <!-- 配置要扫描注入的包, 如果有多个包,以逗号分隔 -->
+    </context-param>
+
     <servlet>
         <servlet-name>AnnotationHandleServlet</servlet-name>
         <servlet-class>xyz.haijin.web.controller.AnnotationHandleServlet</servlet-class>

@@ -1,0 +1,32 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HaijinMVC:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HaijinMVC_jar</output-path>
+    <root id="archive" name="HaijinMVC.jar">
+      <element id="module-output" name="HaijinMVC" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/el-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/jasper.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/jsp-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/catalina.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/ecj-4.6.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/jasper-el.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-jni.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/catalina-ha.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/servlet-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-dbcp.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-jdbc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-util.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/catalina-ant.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-coyote.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/websocket-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-i18n-es.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-i18n-fr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-i18n-ja.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/annotations-api.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/catalina-tribes.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-util-scan.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/tomcat-websocket.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/apache-tomcat-8.0.53-windows-x64/apache-tomcat-8.0.53/lib/catalina-storeconfig.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
